@@ -4,6 +4,10 @@ Never Wastes adds soft delete to ActiveRecord.
 
 It's similar to acts_as_paranoid but simpler. 
 
+## Bundler
+
+    gem 'never_wastes'
+
 ## Usage
 
 First, add deleted column in your models.
