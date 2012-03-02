@@ -22,7 +22,7 @@ Currently it supports boolean "deleted" column only.
 
 Next step is to specify never_wastes in your model which needs soft delete.
 
-    class YourModel << ActiveRecord::Base
+    class YourModel < ActiveRecord::Base
       never_wastes
     end
 
