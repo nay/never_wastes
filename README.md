@@ -30,7 +30,7 @@ Then you can use destroy for soft delete.
 
     model.destroy
 
-If you want to hart delete, use destroy!.
+If you want hard delete, use destroy!.
 
     model.destroy!
 
