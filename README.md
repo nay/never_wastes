@@ -18,7 +18,16 @@ First, add deleted column in your models.
       end
     end
 
-Currently it supports boolean "deleted" column only. 
+Currently the boolean "deleted" column is required.
+
+If you need a timestamp, you can also add deleted_at column.
+
+    class AddDeletedToYourModels < ActiveRecord::Migration
+      def change
+        add_column :your_models, :deleted, :boolean, :null => false, :default => false
+        add_column :your_models, :deleted_at, :datetime
+      end
+    end
 
 Next step is to specify never_wastes in your model which needs soft delete.
 
