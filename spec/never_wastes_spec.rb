@@ -65,4 +65,53 @@ describe User do
       end
     end
   end
+
+  describe ".delete_all_softly" do
+    let!(:delete_users) { (1..3).inject([]) { |result, i| result << Factory.create(:user, deleted: false, deleted_at: nil) } }
+    let!(:undelete_user) { Factory.create(:user, name: 'undeleted', deleted: false, deleted_at: nil) }
+
+    it "should be successful" do
+      expect { User.where(User.arel_table[:name].not_eq('undeleted')).delete_all_softly }.to change(User, :count).by(-3)
+    end
+
+    it "should delete users *soft*ly" do
+      expect { User.where(User.arel_table[:name].not_eq('undeleted')).delete_all_softly }.not_to change(User.unscoped, :count)
+    end
+
+    describe 'after' do
+      before do
+        User.where(User.arel_table[:name].not_eq('undeleted')).delete_all_softly
+      end
+
+      it "should find undeleted users" do
+        User.where(User.arel_table[:name].eq('undeleted')).length.should == 1
+      end
+
+      describe 'columns' do
+        context 'when user is not deleted' do
+          subject { undelete_user.reload }
+          its(:deleted) { should be_false }
+          its(:deleted_at) { should be_nil}
+        end
+
+        context 'when user is deleted' do
+          subject { delete_users.first.reload }
+          its(:deleted) { should be_true }
+          its(:deleted_at) { should_not be_nil }
+        end
+      end
+    end
+  end
+
+  describe ".delete_all!" do
+    let!(:delete_users) { (1..3).inject([]) { |result, i| result << Factory.create(:user, deleted: false, deleted_at: nil) } }
+    let!(:undelete_user) { Factory.create(:user, name: 'undeleted', deleted: false, deleted_at: nil) }
+    it "should be successful" do
+      expect { User.where(User.arel_table[:name].not_eq('undeleted')).delete_all! }.to change(User, :count).by(-3)
+    end
+
+    it "should delete users" do
+      expect { User.where(User.arel_table[:name].not_eq('undeleted')).delete_all! }.to change(User.unscoped, :count).by(-3)
+    end
+  end
 end

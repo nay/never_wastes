@@ -26,7 +26,7 @@ module NeverWastes
         @never_wastes_datetime_column_name = :deleted_at
         def self.soft_destroy_stamps
           stamps = {@never_wastes_boolean_column_name => true}
-          stamps[@never_wastes_datetime_column_name] = Time.now if column_names.include?(@never_wastes_datetime_column_name.to_s)
+          stamps[@never_wastes_datetime_column_name] = self.current_time if column_names.include?(@never_wastes_datetime_column_name.to_s)
           stamps
         end
 
@@ -50,14 +50,26 @@ module NeverWastes
 
         default_scope {where(:deleted => false)}
 
-        def self.with_deleted
-          unscoped
+        class << self
+          def with_deleted
+            unscoped
+          end
+
+          alias_method :delete_all!, :delete_all
+          def delete_all_softly
+            update_all(deleted: true, deleted_at: self.current_time)
+          end
+          alias_method :delete_all, :delete_all_softly
         end
 
         private
         # useful in callbacks
         def destroying_softly?
           @destroying_softly
+        end
+
+        def self.current_time
+          default_timezone == :utc ? Time.now.utc : Time.now
         end
       end
     end
