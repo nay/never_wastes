@@ -50,12 +50,16 @@ module NeverWastes
 
         default_scope {where(:deleted => false)}
 
-        def self.with_deleted
-          unscoped
-        end
+        class << self
+          def with_deleted
+            unscoped
+          end
 
-        def self.delete_all_softly
-          update_all(deleted: true, deleted_at: self.current_time)
+          alias_method :delete_all!, :delete_all
+          def delete_all_softly
+            update_all(deleted: true, deleted_at: self.current_time)
+          end
+          alias_method :delete_all, :delete_all_softly
         end
 
         private
