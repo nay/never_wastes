@@ -18,16 +18,13 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  %w{ activesupport actionpack railties }.each do |gem|
+  %w{ activesupport activerecord }.each do |gem|
     s.add_dependency gem, ['>= 3.0.0']
   end
+
   s.add_development_dependency 'bundler', ['>= 1.0.0']
   s.add_development_dependency 'sqlite3', ['>= 0']
-  %w{ activerecord activemodel }.each do |gem|
-    s.add_development_dependency gem, ['>= 3.0.0']
-  end
   s.add_development_dependency 'rspec', ['>= 0']
-  s.add_development_dependency 'rspec-rails', ['>= 0']
-  s.add_development_dependency 'factory_girl_rails', ['>= 0']
+  s.add_development_dependency 'factory_girl', ['< 3']
   s.add_development_dependency 'database_cleaner', ['>= 0']
 end
