@@ -1,3 +1,4 @@
+require 'active_record'
 require "never_wastes/version"
 
 module NeverWastes

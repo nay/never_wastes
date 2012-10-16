@@ -1,4 +1,3 @@
-require 'action_controller/railtie'
 require 'factory_girl'
 require 'database_cleaner'
 
