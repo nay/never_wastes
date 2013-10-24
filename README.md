@@ -51,12 +51,12 @@ If you need to get models with deleted ones, you can use with_deleted.
 
     models = YourModel.with_deleted.all
 
-In your destroy callbacks, you can use softly_destroying? to check if you are in soft delete or hard delete.
+In your destroy callbacks, you can use destroying_softly? to check if you are in soft delete or hard delete.
 
     after_destroy :delete_files
     private
     def delete_files
-      return if sortly_destroying?
+      return if destroying_softly?
       # delete files associated with the model object
     end
 
