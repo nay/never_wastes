@@ -19,6 +19,12 @@ describe User do
         subject { User.new(name: user.name) }
         it { should be_valid }
       end
+
+      context "when the same name user exists and is deleted, and the other is going to be deleted, when there is an unique index" do
+        before { user.destroy }
+        let(:other) { User.create!(name: user.name) }
+        it { expect { other.destroy }.not_to raise_error }
+      end
     end
   end
 
@@ -28,13 +34,15 @@ describe User do
 
     context 'when user is not deleted' do
       its(:deleted) { should be_false }
-      its(:deleted_at) { should be_nil}
+      its(:deleted_at) { should be_nil }
+      its(:waste_id) { should eq(0) }
     end
 
     context 'when user is deleted' do
       before { user.destroy }
       its(:deleted) { should be_true }
       its(:deleted_at) { should_not be_nil }
+      its(:waste_id) { should eq(user.id)}
     end
   end
 
@@ -92,12 +100,14 @@ describe User do
           subject { undelete_user.reload }
           its(:deleted) { should be_false }
           its(:deleted_at) { should be_nil}
+          its(:waste_id) { should eq(0) }
         end
 
         context 'when user is deleted' do
           subject { delete_users.first.reload }
           its(:deleted) { should be_true }
           its(:deleted_at) { should_not be_nil }
+          its(:waste_id) { should eq(delete_users.first.id) }
         end
       end
     end

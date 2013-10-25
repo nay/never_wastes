@@ -6,6 +6,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 # Merge keys is often used in mongoid.yml
 # See: http://redmine.ruby-lang.org/issues/show/4300
 if RUBY_VERSION >= '1.9.2'
+  require 'yaml'
   YAML::ENGINE.yamler = 'syck'
 end
 require 'active_record'

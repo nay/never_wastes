@@ -8,7 +8,13 @@ ActiveRecord::Base.establish_connection('test')
 #migrations
 class CreateAllTables < ActiveRecord::Migration
   def self.up
-    create_table(:users) {|t| t.string :name; t.boolean :deleted; t.datetime :deleted_at }
+    create_table(:users) do |t|
+      t.string :name
+      t.boolean :deleted, :null => false, :default => false
+      t.datetime :deleted_at
+      t.integer :waste_id, :null => false, :default => 0
+    end
+    add_index :users, [:name, :waste_id], :unique => true
   end
 end
 

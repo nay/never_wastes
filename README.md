@@ -10,6 +10,8 @@ It's similar to acts_as_paranoid but simpler.
 
 ## Usage
 
+### Migrations
+
 First, add deleted column in your models.
 
     class AddDeletedToYourModels < ActiveRecord::Migration
@@ -29,11 +31,37 @@ If you need a timestamp, you can also add deleted_at column.
       end
     end
 
+If you need to have unique index for that table, waste_id will help.
+
+    class AddDeletedToYourModels < ActiveRecord::Migration
+      def change
+        add_column :your_models, :deleted, :boolean, :null => false, :default => false
+        add_column :your_models, :deleted_at, :datetime
+        add_column :your_models, :waste_id, :integer, :null => false, :default => 0
+      end
+    end
+
+The waste_id supposed to be 0 when it's not deleted.
+When the record is softly deleted, its primary key is copied to waste_id to be unique in all deleted records.
+This helps you add unique index for some typical column like 'name' as the following example;
+
+    class AddNameIndexToYourModels < ActiveRecord::Migration
+      def up
+        add_index :your_models, [:name, :waste_id], :unique => true
+      end
+
+      # down is needed
+    end
+
+### Declaration
+
 Next step is to specify never_wastes in your model which needs soft delete.
 
     class YourModel < ActiveRecord::Base
       never_wastes
     end
+
+### Use APIs
 
 Then you can use destroy for soft delete.
 
