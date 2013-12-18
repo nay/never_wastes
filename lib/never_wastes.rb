@@ -28,7 +28,8 @@ module NeverWastes
         self.never_wastes_datetime_column_name = :deleted_at
         self.never_wastes_id_column_name = :waste_id
 
-        alias_method :destroy!, :destroy
+        alias_method :demolish, :destroy
+        alias_method :demolish!, :destroy! if instance_methods.include?(:destroy!)
 
         def destroy_softly
           @destroying_softly = true
@@ -53,7 +54,8 @@ module NeverWastes
             unscoped
           end
 
-          alias_method :delete_all!, :delete_all
+          alias_method :demolish_all, :delete_all
+
           def delete_all_softly
             updates = sanitize_sql_for_assignment(never_wastes_boolean_column_name => true)
             if column_names.include?(never_wastes_datetime_column_name.to_s)

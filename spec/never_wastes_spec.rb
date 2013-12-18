@@ -113,15 +113,15 @@ describe User do
     end
   end
 
-  describe ".delete_all!" do
+  describe ".demolish_all" do
     let!(:delete_users) { (1..3).inject([]) { |result, i| result << Factory.create(:user, deleted: false, deleted_at: nil) } }
     let!(:undelete_user) { Factory.create(:user, name: 'undeleted', deleted: false, deleted_at: nil) }
     it "should be successful" do
-      expect { User.where(User.arel_table[:name].not_eq('undeleted')).delete_all! }.to change(User, :count).by(-3)
+      expect { User.where(User.arel_table[:name].not_eq('undeleted')).demolish_all }.to change(User, :count).by(-3)
     end
 
     it "should delete users" do
-      expect { User.where(User.arel_table[:name].not_eq('undeleted')).delete_all! }.to change(User.unscoped, :count).by(-3)
+      expect { User.where(User.arel_table[:name].not_eq('undeleted')).demolish_all }.to change(User.unscoped, :count).by(-3)
     end
   end
 end

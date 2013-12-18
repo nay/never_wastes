@@ -67,13 +67,17 @@ Then you can use destroy for soft delete.
 
     model.destroy
 
-If you want hard delete, use destroy!.
+If you want hard delete, use demolish.
 
-    model.destroy!
+    model.demolish
+
+Using Rails 4.0 or later, you can use #demolish! instead of #destroy!.
 
 You can get non-deleted models by default.
 
     models = YourModel.all # deleted models are not included
+
+This gem also changes .delete_all to soft deletion. You can use .demolish_all as the original .delete_all.
 
 If you need to get models with deleted ones, you can use with_deleted.
 
