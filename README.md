@@ -13,14 +13,16 @@ It's similar to acts_as_paranoid but simpler.
 ### Migrations
 
 First, add deleted column in your models.
+This will generate the migrations file for Model.
 
-    class AddDeletedToYourModels < ActiveRecord::Migration
-      def change
-        add_column :your_models, :deleted, :boolean, :null => false, :default => false
-      end
-    end
+```bash
+ # ex) 'User' model
+ $ rails generate never_wastes:migration User
+ $ rake db:migrate
+```
 
 Currently the boolean "deleted" column is required.
+Please refer to the following if you need customization.
 
 If you need a timestamp, you can also add deleted_at column.
 
